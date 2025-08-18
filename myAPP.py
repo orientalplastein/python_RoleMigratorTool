@@ -1,11 +1,14 @@
 import os
 import shutil
+from datetime import datetime
 from find_paths import find_target_directories
 
 # noinspection SpellCheckingInspection
+print(f"{datetime.now()}: 程序开始执行")
+
 foundPaths = find_target_directories(r'SeasunGame\Game')
 
-path_select = input("选择游戏路径——第__个:")
+path_select = input("->选择游戏路径——第__个:")
 try:
     path_selected = foundPaths[int(path_select)-1][0]
 except ValueError:
@@ -13,7 +16,7 @@ except ValueError:
 # noinspection PyUnboundLocalVariable
 print(path_selected)
 
-version_select = input("<1>  正式服\n<2>  测试服\n选择游戏版本:")
+version_select = input("<1>  正式服\n<2>  测试服\n->选择游戏版本:")
 try:
     version_select = int(version_select)
     if version_select == 1:
@@ -21,7 +24,7 @@ try:
     elif version_select == 2:
         game_path = os.path.join(path_selected, 'JX3_EXP')
 except ValueError:
-    print('请输入正确的序号')
+    print('->请输入正确的序号')
 
 # 筛选出有数据的角色
 # noinspection PyUnboundLocalVariable
@@ -44,18 +47,19 @@ for user in valid_user:
             user_server_serverIndex_rolePath.append(a) #结果有序
 
 #按账号分类打印显示
+print("->检索出的用户列表如下——")
 for user in valid_user:
     for user_s in user_server_serverIndex_rolePath:
         user_seq = '\\'+user+'\\'
         if  user_seq in user_s:
             print(f'<{user_server_serverIndex_rolePath.index(user_s)+1}>  {user_s}')
-    print('--------------------------------')
+    print('-'*len(userdata_path))
 
 #确认源角色和目标角色，源->目标
-role_origin2target = list(map(int,input("输入源角色序号和目标角色序号，以空格分割: ").split(' ')))
+role_origin2target = list(map(int,input("->输入源角色序号和目标角色序号，以空格分割: ").split(' ')))
 origin_role = user_server_serverIndex_rolePath[role_origin2target[0]-1].rsplit('\\',1)[-1]
 target_role = user_server_serverIndex_rolePath[role_origin2target[1]-1].rsplit('\\',1)[-1]
-print(f'源角色<{origin_role}> , 目标角色<{target_role}>')
+print(f'源角色 <{origin_role}> , 目标角色 <{target_role}>')
 
 #进行文件夹复制操作，源->目标
 try:
@@ -63,3 +67,5 @@ try:
 except ValueError:
     print('请输入正确的序号')
 print('不出意外的话，数据迁移完成')
+#生成的app不自动退出
+input("程序执行完毕，按Enter键退出...")
