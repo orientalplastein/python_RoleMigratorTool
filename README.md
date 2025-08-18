@@ -28,11 +28,11 @@
 
 3. **选择游戏版本**  
    根据需求选择"正式服"或"测试服"（输入对应序号）：
-   ![选择游戏版本](https://github.com/orientalplastein/python_demo/blob/master/images/屏幕截图%2025-08-19%012704.png)
+   ![选择游戏版本](https://github.com/orientalplastein/python_demo/blob/master/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-08-19%20012704.png)
 
 4. **角色数据迁移**  
    输入源角色序号和目标角色序号（以空格分隔），完成数据迁移：
-   ![角色数据迁移](https://github.com/orientalplastein/python_demo/blob/master/images/屏幕截图%2025-08-19%012747.png)
+   ![角色数据迁移](https://github.com/orientalplastein/python_demo/blob/master/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-08-19%20012747.png)
 
 ## 文件说明
 - `myAPP.py`：主程序，负责数据迁移核心逻辑
