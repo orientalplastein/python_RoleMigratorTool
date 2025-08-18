@@ -50,7 +50,7 @@ def find_target_directories(target_rel_path):
                 # 检查目标路径是否存在
                 target_path = os.path.join(dirpath, target_rel_path)
                 if os.path.isdir(target_path):
-                    # 计算文件夹大小
+                    # 计算找到的文件夹大小
                     find_path_count += 1
                     size_mb, error_msg = get_folder_size(target_path)
                     found_dirs.append((target_path, size_mb, error_msg))

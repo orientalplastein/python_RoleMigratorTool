@@ -8,7 +8,7 @@ print(f"{datetime.now()}: 程序开始执行")
 
 foundPaths = find_target_directories(r'SeasunGame\Game')
 
-path_select = input("->选择游戏路径——第__个:")
+path_select = input(f"->选择游戏路径——第__个[1-{len(foundPaths)}]: ")
 try:
     path_selected = foundPaths[int(path_select)-1][0]
 except ValueError:
@@ -16,7 +16,7 @@ except ValueError:
 # noinspection PyUnboundLocalVariable
 print(path_selected)
 
-version_select = input("<1>  正式服\n<2>  测试服\n->选择游戏版本:")
+version_select = input(f"<1>  正式服\n<2>  测试服\n->选择游戏版本[1-2]: ")
 try:
     version_select = int(version_select)
     if version_select == 1:
@@ -53,10 +53,10 @@ for user in valid_user:
         user_seq = '\\'+user+'\\'
         if  user_seq in user_s:
             print(f'<{user_server_serverIndex_rolePath.index(user_s)+1}>  {user_s}')
-    print('-'*len(userdata_path))
+    print('-'*(len(userdata_path)+7))
 
 #确认源角色和目标角色，源->目标
-role_origin2target = list(map(int,input("->输入源角色序号和目标角色序号，以空格分割: ").split(' ')))
+role_origin2target = list(map(int,input(f"->输入源角色序号和目标角色序号，以空格分割[1-{len(user_server_serverIndex_rolePath)}]: ").split(' ')))
 origin_role = user_server_serverIndex_rolePath[role_origin2target[0]-1].rsplit('\\',1)[-1]
 target_role = user_server_serverIndex_rolePath[role_origin2target[1]-1].rsplit('\\',1)[-1]
 print(f'源角色 <{origin_role}> , 目标角色 <{target_role}>')
