@@ -24,7 +24,7 @@
 
 2. **选择游戏路径**  
    程序自动扫描并列出所有检测到的剑网3游戏目录，输入对应序号选择目标路径：
-   ![选择游戏路径](https://github.com/orientalplastein/python_demo/blob/master/images/屏幕截图%2025-08-19%012652.png)
+   ![选择游戏路径](https://github.com/orientalplastein/python_demo/blob/master/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-08-19%20012652.png)
 
 3. **选择游戏版本**  
    根据需求选择"正式服"或"测试服"（输入对应序号）：
