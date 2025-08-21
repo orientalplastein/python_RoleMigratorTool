@@ -69,4 +69,4 @@ A：不会。系统不会自动创建迁移前备份，如需备份请手动点�
 - 邮件：govocheng@gmail.com
 - GitHub Issues：[项目仓库链接](https://github.com/orientalplastein/python_RoleMigratorTool)
 
-> **注**：本工具仅用于《剑网3》个人数据迁移，请勿用于商业用途；使用前建议手动备份原始数据
+> **注**：使用前建议手动备份原始数据
