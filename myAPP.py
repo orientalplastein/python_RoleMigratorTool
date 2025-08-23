@@ -1173,64 +1173,50 @@ class GameDataMigrator:
         migrate_thread.start()
 
     def do_migration(self, source_path, target_path):
-        """执行数据迁移（仅复制源角色目录到目标角色目录，不删除任何文件）"""
+        """执行数据迁移（直接复制整个源角色目录到目标角色目录，不计算相同文件）"""
         try:
-            # 获取源目录的所有文件
-            source_files = set()
+            # 计算源目录中的文件总数，用于进度显示
+            total_files = 0
             for root, _, files in os.walk(source_path):
-                for file in files:
-                    rel_path = os.path.relpath(os.path.join(root, file), source_path)
-                    source_files.add(rel_path)
+                total_files += len(files)
 
-            target_files = set()
-            if os.path.exists(target_path):
-                for root, _, files in os.walk(target_path):
-                    for file in files:
-                        rel_path = os.path.relpath(os.path.join(root, file), target_path)
-                        target_files.add(rel_path)
-
-            # 计算需要复制的文件（源目录中有但目标目录中没有，或已修改的文件）
-            files_to_copy = []
-            for root, _, files in os.walk(source_path):
-                for file in files:
-                    src_file = os.path.join(root, file)
-                    rel_path = os.path.relpath(src_file, source_path)
-                    dest_file = os.path.join(target_path, rel_path)
-
-                    # 检查文件是否需要复制
-                    if rel_path not in target_files or os.path.getmtime(src_file) > os.path.getmtime(dest_file):
-                        files_to_copy.append(src_file)
-
-            total_operations = len(files_to_copy)
-            if total_operations == 0:
-                self.root.after(0, lambda: messagebox.showinfo("提示", "源角色目录和目标角色目录已同步，无需迁移"))
+            if total_files == 0:
+                self.root.after(0, lambda: messagebox.showinfo("提示", "源角色目录为空，无需迁移"))
                 self.root.after(0, lambda: self.finish_migration(True))
                 return
 
-            # 执行文件复制
-            copied_files = 0
-            for i, src_file in enumerate(files_to_copy, 1):
-                # 计算相对路径
-                rel_path = os.path.relpath(src_file, source_path)
-                dest_file = os.path.join(target_path, rel_path)
+            # 如果目标目录存在，先删除
+            if os.path.exists(target_path):
+                shutil.rmtree(target_path)
 
-                # 创建目标目录
-                dest_dir = os.path.dirname(dest_file)
-                os.makedirs(dest_dir, exist_ok=True)
+            # 创建目标目录
+            os.makedirs(target_path, exist_ok=True)
+
+            # 复制文件并更新进度
+            copied_files = 0
+            for root, dirs, files in os.walk(source_path):
+                # 创建目标目录结构
+                rel_path = os.path.relpath(root, source_path)
+                target_root = os.path.join(target_path, rel_path)
+                os.makedirs(target_root, exist_ok=True)
 
                 # 复制文件
-                shutil.copy2(src_file, dest_file)
+                for file in files:
+                    src_file = os.path.join(root, file)
+                    dest_file = os.path.join(target_root, file)
 
-                copied_files += 1
+                    shutil.copy2(src_file, dest_file)
 
-                # 更新进度
-                progress = (copied_files / total_operations) * 100
-                self.root.after(0, lambda p=progress: self.progress_var.set(p))
+                    copied_files += 1
 
-                # 更新日志
-                if i % 1 == 0 or i == len(files_to_copy):
-                    self.root.after(0, lambda f=copied_files, t=len(files_to_copy): 
-                    self.log_message(f"已复制 {f}/{t} 文件"))
+                    # 更新进度
+                    progress = (copied_files / total_files) * 100
+                    self.root.after(0, lambda p=progress: self.progress_var.set(p))
+
+                    # 更新日志
+                    if copied_files % 10 == 0 or copied_files == total_files:
+                        self.root.after(0, lambda f=copied_files, t=total_files: 
+                                        self.log_message(f"已复制 {f}/{t} 文件"))
 
             self.root.after(0, lambda: self.log_message(f"数据迁移完成! 共复制 {copied_files} 个文件"))
             self.root.after(0, lambda: self.finish_migration(True))
